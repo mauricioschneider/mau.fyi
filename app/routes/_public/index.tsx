@@ -24,22 +24,24 @@ function RouteComponent() {
     <Container className="mt-9">
       <div className="max-w-2xl">
         <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-          Software designer, founder, and amateur astronaut.
+          Technologist, jack of all trades, and hoarder of domain names.
         </h1>
         <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-          I’m Spencer, a software designer and entrepreneur based in New York
-          City. I’m the founder and CEO of Planetaria, where we develop
-          technologies that empower regular people to explore space on their own
-          terms.
+          I'm Mauricio, a technology professional from Chile now based in the
+          Pacific Northwest, USA. With over a decade in the information security
+          and software world, I focus on bridging the gap between technical
+          complexity and human needs, and how to scale operations without losing
+          authenticity and personal touch. A problem solver at heart, I lead
+          with compassion and by example.
         </p>
         <div className="mt-6 flex gap-6">
           <SocialLink
-            href="#"
+            href="https://github.com/mauricioschneider/"
             aria-label="Follow on GitHub"
             icon={GitHubIcon}
           />
           <SocialLink
-            href="#"
+            href="https://www.linkedin.com/in/mauriciorschneider/"
             aria-label="Follow on LinkedIn"
             icon={LinkedInIcon}
           />
