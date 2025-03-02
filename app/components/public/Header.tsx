@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState, useEffect } from 'react'
-import { Link, useRouter } from '@tanstack/react-router'
+import { Link, useLocation, useRouter } from '@tanstack/react-router'
 import { Image } from '@unpic/react'
 import { Container } from './Container'
 import {
@@ -105,8 +105,9 @@ function NavItem({
   href: string
   children: React.ReactNode
 }) {
-  const router = useRouter()
-  const currentPath = router.state.location.pathname
+  const location = useLocation()
+  const currentPath = location.pathname
+  console.log(currentPath)
   let isActive = href === currentPath
 
   return (
@@ -192,14 +193,13 @@ function Avatar({
 }
 
 export function Header() {
+  const location = useLocation()
   const router = useRouter()
-  const [isHomePage, setIsHomePage] = useState(
-    router.state.location.pathname === '/',
-  )
+  const [isHomePage, setIsHomePage] = useState(location.pathname === '/')
 
   useEffect(() => {
     const handleRouteChange = () => {
-      setIsHomePage(router.state.location.pathname === '/')
+      setIsHomePage(location.pathname === '/')
     }
 
     const unsubscribe = router.subscribe('onResolved', handleRouteChange)
