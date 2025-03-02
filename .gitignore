@@ -16,3 +16,15 @@ Thumbs.db
 # Build directories
 dist
 dist-ssr
+
+/build/
+/api/
+/server/build
+/public/build
+
+# Deploy files
+.env
+.vercel
+.output
+.vinxi
+.netlify
