@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, Link } from '@tanstack/react-router'
 import { Layout } from '~/components/public/Layout'
 import publicCss from '~/styles/tailwind.css?url'
-import favicon from '/favicon.png?url'
+import favicon from '/public/favicon.png?url'
 import { seo } from '~/utils/seo'
 
 export const Route = createFileRoute('/_public')({
