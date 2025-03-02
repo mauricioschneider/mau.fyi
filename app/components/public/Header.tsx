@@ -1,15 +1,15 @@
-import { useLayoutEffect, useRef, useState, useEffect } from 'react';
-import { Link, useRouter } from "@tanstack/react-router";
-import { Image } from '@unpic/react';
-import { Container } from './Container';
+import { useLayoutEffect, useRef, useState, useEffect } from 'react'
+import { Link, useRouter } from '@tanstack/react-router'
+import { Image } from '@unpic/react'
+import { Container } from './Container'
 import {
   Popover,
   PopoverButton,
   PopoverBackdrop,
   PopoverPanel,
 } from '@headlessui/react'
-import { ThemeToggle } from './ThemeToggle';
-import {clsx} from 'clsx';
+import { ThemeToggle } from './ThemeToggle'
+import { clsx } from 'clsx'
 
 import avatarImage from '~/images/avatar.jpg'
 
@@ -87,7 +87,7 @@ function MobileNavigation(
         <nav className="mt-6">
           <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
             <MobileNavItem href="/about">About</MobileNavItem>
-            <MobileNavItem href="/articles">Articles</MobileNavItem>
+            <MobileNavItem href="/blog">Blog</MobileNavItem>
             <MobileNavItem href="/projects">Projects</MobileNavItem>
             <MobileNavItem href="/speaking">Speaking</MobileNavItem>
             <MobileNavItem href="/uses">Uses</MobileNavItem>
@@ -105,9 +105,9 @@ function NavItem({
   href: string
   children: React.ReactNode
 }) {
-  const router = useRouter();
-  const currentPath = router.state.location.pathname;
-  let isActive = href === currentPath;
+  const router = useRouter()
+  const currentPath = router.state.location.pathname
+  let isActive = href === currentPath
 
   return (
     <li>
@@ -134,7 +134,7 @@ function DesktopNavigation(props: React.ComponentPropsWithoutRef<'nav'>) {
     <nav {...props}>
       <ul className="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 ring-1 shadow-lg shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
         <NavItem href="/about">About</NavItem>
-        <NavItem href="/articles">Articles</NavItem>
+        <NavItem href="/blog">Blog</NavItem>
         <NavItem href="/projects">Projects</NavItem>
         <NavItem href="/speaking">Speaking</NavItem>
         <NavItem href="/uses">Uses</NavItem>
@@ -192,21 +192,22 @@ function Avatar({
 }
 
 export function Header() {
-  const router = useRouter();
-  const [isHomePage, setIsHomePage] = useState(router.state.location.pathname === '/')
+  const router = useRouter()
+  const [isHomePage, setIsHomePage] = useState(
+    router.state.location.pathname === '/',
+  )
 
   useEffect(() => {
     const handleRouteChange = () => {
-      setIsHomePage(router.state.location.pathname === '/');
+      setIsHomePage(router.state.location.pathname === '/')
     }
 
-    const unsubscribe = router.subscribe('onResolved', handleRouteChange);
+    const unsubscribe = router.subscribe('onResolved', handleRouteChange)
 
     return () => {
-      unsubscribe();
+      unsubscribe()
     }
-  }, [router]);
-
+  }, [router])
 
   let headerRef = useRef<React.ComponentRef<'div'>>(null)
   let avatarRef = useRef<React.ComponentRef<'div'>>(null)

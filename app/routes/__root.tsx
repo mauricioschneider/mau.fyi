@@ -5,6 +5,8 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
+import { DefaultCatchBoundary } from '~/components/public/DefaultCatchBoundary'
+import { NotFound } from '~/components/public/NotFound'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -22,6 +24,20 @@ export const Route = createRootRoute({
     ],
   }),
   component: RootComponent,
+  errorComponent: (props) => {
+    return (
+      <RootDocument>
+        <DefaultCatchBoundary {...props} />
+      </RootDocument>
+    )
+  },
+  notFoundComponent: () => {
+    return (
+      <RootDocument>
+        <NotFound />
+      </RootDocument>
+    )
+  },
 })
 
 function RootComponent() {

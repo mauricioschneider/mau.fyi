@@ -14,7 +14,10 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as HelpImport } from './routes/help'
 import { Route as PublicImport } from './routes/_public'
 import { Route as PublicIndexImport } from './routes/_public/index'
+import { Route as PublicBlogImport } from './routes/_public/blog'
 import { Route as PublicAboutImport } from './routes/_public/about'
+import { Route as PublicBlogIndexImport } from './routes/_public/blog.index'
+import { Route as PublicBlogSplatImport } from './routes/_public/blog.$'
 
 // Create/Update Routes
 
@@ -35,10 +38,28 @@ const PublicIndexRoute = PublicIndexImport.update({
   getParentRoute: () => PublicRoute,
 } as any)
 
+const PublicBlogRoute = PublicBlogImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => PublicRoute,
+} as any)
+
 const PublicAboutRoute = PublicAboutImport.update({
   id: '/about',
   path: '/about',
   getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicBlogIndexRoute = PublicBlogIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PublicBlogRoute,
+} as any)
+
+const PublicBlogSplatRoute = PublicBlogSplatImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => PublicBlogRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -66,6 +87,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAboutImport
       parentRoute: typeof PublicImport
     }
+    '/_public/blog': {
+      id: '/_public/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof PublicBlogImport
+      parentRoute: typeof PublicImport
+    }
     '/_public/': {
       id: '/_public/'
       path: '/'
@@ -73,18 +101,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicIndexImport
       parentRoute: typeof PublicImport
     }
+    '/_public/blog/$': {
+      id: '/_public/blog/$'
+      path: '/$'
+      fullPath: '/blog/$'
+      preLoaderRoute: typeof PublicBlogSplatImport
+      parentRoute: typeof PublicBlogImport
+    }
+    '/_public/blog/': {
+      id: '/_public/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof PublicBlogIndexImport
+      parentRoute: typeof PublicBlogImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface PublicBlogRouteChildren {
+  PublicBlogSplatRoute: typeof PublicBlogSplatRoute
+  PublicBlogIndexRoute: typeof PublicBlogIndexRoute
+}
+
+const PublicBlogRouteChildren: PublicBlogRouteChildren = {
+  PublicBlogSplatRoute: PublicBlogSplatRoute,
+  PublicBlogIndexRoute: PublicBlogIndexRoute,
+}
+
+const PublicBlogRouteWithChildren = PublicBlogRoute._addFileChildren(
+  PublicBlogRouteChildren,
+)
+
 interface PublicRouteChildren {
   PublicAboutRoute: typeof PublicAboutRoute
+  PublicBlogRoute: typeof PublicBlogRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicAboutRoute: PublicAboutRoute,
+  PublicBlogRoute: PublicBlogRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
 }
 
@@ -95,13 +153,18 @@ export interface FileRoutesByFullPath {
   '': typeof PublicRouteWithChildren
   '/help': typeof HelpRoute
   '/about': typeof PublicAboutRoute
+  '/blog': typeof PublicBlogRouteWithChildren
   '/': typeof PublicIndexRoute
+  '/blog/$': typeof PublicBlogSplatRoute
+  '/blog/': typeof PublicBlogIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/help': typeof HelpRoute
   '/about': typeof PublicAboutRoute
   '/': typeof PublicIndexRoute
+  '/blog/$': typeof PublicBlogSplatRoute
+  '/blog': typeof PublicBlogIndexRoute
 }
 
 export interface FileRoutesById {
@@ -109,15 +172,26 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteWithChildren
   '/help': typeof HelpRoute
   '/_public/about': typeof PublicAboutRoute
+  '/_public/blog': typeof PublicBlogRouteWithChildren
   '/_public/': typeof PublicIndexRoute
+  '/_public/blog/$': typeof PublicBlogSplatRoute
+  '/_public/blog/': typeof PublicBlogIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/help' | '/about' | '/'
+  fullPaths: '' | '/help' | '/about' | '/blog' | '/' | '/blog/$' | '/blog/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/help' | '/about' | '/'
-  id: '__root__' | '/_public' | '/help' | '/_public/about' | '/_public/'
+  to: '/help' | '/about' | '/' | '/blog/$' | '/blog'
+  id:
+    | '__root__'
+    | '/_public'
+    | '/help'
+    | '/_public/about'
+    | '/_public/blog'
+    | '/_public/'
+    | '/_public/blog/$'
+    | '/_public/blog/'
   fileRoutesById: FileRoutesById
 }
 
@@ -149,6 +223,7 @@ export const routeTree = rootRoute
       "filePath": "_public.tsx",
       "children": [
         "/_public/about",
+        "/_public/blog",
         "/_public/"
       ]
     },
@@ -159,9 +234,25 @@ export const routeTree = rootRoute
       "filePath": "_public/about.tsx",
       "parent": "/_public"
     },
+    "/_public/blog": {
+      "filePath": "_public/blog.tsx",
+      "parent": "/_public",
+      "children": [
+        "/_public/blog/$",
+        "/_public/blog/"
+      ]
+    },
     "/_public/": {
       "filePath": "_public/index.tsx",
       "parent": "/_public"
+    },
+    "/_public/blog/$": {
+      "filePath": "_public/blog.$.tsx",
+      "parent": "/_public/blog"
+    },
+    "/_public/blog/": {
+      "filePath": "_public/blog.index.tsx",
+      "parent": "/_public/blog"
     }
   }
 }
