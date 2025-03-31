@@ -3,6 +3,9 @@ export function getPostList() {
     {
       id: 'test-blog-post',
     },
+    {
+      id: 'interviewing-for-talent',
+    },
   ]
 }
 
