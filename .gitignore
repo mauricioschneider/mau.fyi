@@ -28,3 +28,6 @@ dist-ssr
 .output
 .vinxi
 .netlify
+
+# IDE dirs
+.idea
