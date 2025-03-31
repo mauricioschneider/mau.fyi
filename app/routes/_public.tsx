@@ -1,7 +1,6 @@
 import { createFileRoute, Outlet, Link } from '@tanstack/react-router'
 import { Layout } from '~/components/public/Layout'
 import publicCss from '~/styles/tailwind.css?url'
-import favicon from '/public/favicon.png?url'
 import { seo } from '~/utils/seo'
 
 export const Route = createFileRoute('/_public')({
@@ -18,7 +17,7 @@ export const Route = createFileRoute('/_public')({
       { rel: 'stylesheet', href: publicCss },
       {
         rel: 'icon',
-        href: favicon,
+        href: '/favicon.png',
         type: 'image/x-icon',
         sizes: '16x16',
       },

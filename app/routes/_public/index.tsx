@@ -27,12 +27,18 @@ function RouteComponent() {
           Technologist, jack of all trades, and hoarder of domain names.
         </h1>
         <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-          I'm Mauricio, a technology professional from Chile now based in the
-          Pacific Northwest, USA. With over a decade in the information security
-          and software world, I focus on bridging the gap between technical
-          complexity and human needs, and how to scale operations without losing
-          authenticity and personal touch. A problem solver at heart, I lead
-          with compassion and by example.
+          I'm Mauricio Schneider, a technology professional from Chile now based
+          in the Pacific Northwest. Throughout my decade in information security
+          and software, I've focused on bridging the gap between technical
+          complexity and human needs, helping organizations scale without losing
+          their authenticity.
+        </p>
+        <p className="mt-6 text-base text-zinc-600 dark:text-zinc-400">
+          My expertise spans cybersecurity, technical support, and software
+          development. As a problem solver at heart, I believe effective
+          solutions come from understanding both technical systems and the
+          people who use them. I lead with compassion and by example,
+          translating complex challenges into practical outcomes.
         </p>
         <div className="mt-6 flex gap-6">
           <SocialLink
