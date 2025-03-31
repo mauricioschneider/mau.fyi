@@ -281,6 +281,23 @@ export default {
           },
         },
       },
+
+      blogpost: {
+        css: {
+          h2: {
+            fontSize: theme('fontSize.2xl')[0],
+            lineHeight: theme('lineHeight.7'),
+
+          },
+          h3: {
+            fontSize: theme('fontSize.xl')[0],
+            lineHeight: theme('lineHeight.7'),
+            marginTop: theme('spacing.1'),
+            marginBottom: theme('spacing.1'),
+          }
+
+        }
+      },
     }),
   },
 } satisfies Config
