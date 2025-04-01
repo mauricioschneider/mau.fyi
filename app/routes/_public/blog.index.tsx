@@ -1,13 +1,12 @@
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { z } from 'zod'
 import { createServerFn } from '@tanstack/react-start'
-import { getPostList, formatAuthors } from '~/utils/blog'
+import { getPostList } from '~/utils/blog'
 import { extractFrontMatter, fetchRepoFile } from '~/utils/docs.server'
 import { setHeaders } from 'vinxi/http'
 import { PostNotFound } from './blog'
 import { Markdown } from '~/components/public/Markdown'
 import { format } from 'date-fns'
-import { getWebRequest } from '@tanstack/react-start/server'
 import { ArticleWithSlug } from '~/components/public/ArticleLayout'
 import { Card } from '~/components/public/Card'
 import { SimpleLayout } from '~/components/public/SimpleLayout'
@@ -18,7 +17,7 @@ type SearchParams = {
   page: string
 }
 
-const fetchFrontMatters = createServerFn({ method: 'GET' })
+export const fetchFrontMatters = createServerFn({ method: 'GET' })
   .validator(z.object({ page: z.number() }))
   .handler(async ({ data: { page } }) => {
     const postInfos = getPostList()
@@ -103,7 +102,7 @@ export const Route = createFileRoute('/_public/blog/')({
   component: BlogIndex,
 })
 
-function Article({ article }: { article: ArticleWithSlug }) {
+export function Article({ article }: { article: ArticleWithSlug }) {
   return (
     <article className="md:grid md:grid-cols-4 md:items-baseline">
       <Card className="md:col-span-3">

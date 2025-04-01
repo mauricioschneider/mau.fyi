@@ -3,11 +3,20 @@ import { Container } from '~/components/public/Container'
 import { GitHubIcon, LinkedInIcon } from '~/components/public/SocialIcons'
 import { Button } from '~/components/Button'
 
-import logoAuth0 from '~/images/auth0.png';
+import { fetchFrontMatters } from '~/routes/_public/blog.index'
+import { Article } from '~/routes/_public/blog.index'
+
+import logoAuth0 from '~/images/auth0.png'
 import logoOkta from '~/images/okta.png'
 import logoDev from '~/images/dev.png'
 
 export const Route = createFileRoute('/_public/')({
+  loader: () =>
+    fetchFrontMatters({
+      data: {
+        page: 1
+      }
+    }),
   component: RouteComponent
 })
 
@@ -44,7 +53,8 @@ function Role({ role }: { role: Role }) {
 
   return (
     <li className="flex gap-4">
-      <div className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center ring-1 shadow-md shadow-zinc-800/5 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
+      <div
+        className="relative mt-1 flex h-10 w-10 flex-none items-center justify-center ring-1 shadow-md shadow-zinc-800/5 ring-zinc-900/5 dark:border dark:border-zinc-700/50 dark:bg-zinc-800 dark:ring-0">
         <img src={role.logo} alt="" className="h-7 w-7" />
       </div>
       <dl className="flex flex-auto flex-wrap gap-x-2">
@@ -61,7 +71,8 @@ function Role({ role }: { role: Role }) {
           className="ml-auto text-xs text-zinc-400 dark:text-zinc-500"
           aria-label={`${startLabel} until ${endLabel}`}
         >
-          <time dateTime={startDate}>{startLabel}</time>{' '}
+          <time dateTime={startDate}>{startLabel}</time>
+          {' '}
           <span aria-hidden="true">—</span>{' '}
           <time dateTime={endDate}>{endLabel}</time>
         </dd>
@@ -106,7 +117,6 @@ function ArrowDownIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   )
 }
 
-
 function Resume() {
   let resume: Array<Role> = [
     {
@@ -114,49 +124,45 @@ function Resume() {
       title: 'Principal Security Analyst',
       logo: logoOkta,
       start: '2020',
-      end: '2025',
-      // end: {
-      //   label: 'Present',
-      //   dateTime: new Date().getFullYear().toString(),
-      // },
+      end: '2024'
     },
     {
       company: 'Auth0',
       title: 'Sr. Manager, Dev Support',
       logo: logoAuth0,
       start: '2020',
-      end: '2020',
+      end: '2020'
     },
     {
       company: 'Auth0',
       title: 'Escalation Manager',
       logo: logoAuth0,
       start: '2019',
-      end: '2020',
+      end: '2020'
     },
     {
       company: 'Auth0',
       title: 'Regional Manager, Dev Support',
       logo: logoAuth0,
       start: '2017',
-      end: '2019',
+      end: '2019'
     },
     {
       company: 'Auth0',
       title: 'Developer Support Engineer',
       logo: logoAuth0,
       start: '2016',
-      end: '2017',
+      end: '2017'
     },
     {
       company: 'Various',
       title: 'Software Engineer',
       logo: logoDev,
       start: '2012',
-      end: '2016',
-    },
-
+      end: '2016'
+    }
   ]
+
 
   return (
     <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
@@ -171,13 +177,24 @@ function Resume() {
       </ol>
       <Button href="#" variant="secondary" className="group mt-6 w-full">
         Download CV
-        <ArrowDownIcon className="h-4 w-4 stroke-zinc-400 transition group-active:stroke-zinc-600 dark:group-hover:stroke-zinc-50 dark:group-active:stroke-zinc-50" />
+        <ArrowDownIcon
+          className="h-4 w-4 stroke-zinc-400 transition group-active:stroke-zinc-600 dark:group-hover:stroke-zinc-50 dark:group-active:stroke-zinc-50" />
       </Button>
     </div>
   )
 }
 
 function RouteComponent() {
+  // TODO: refactor userLoaderData to live outside the route file
+  const { posts } = Route.useLoaderData()
+  const latest = posts[0]
+  const article = {
+    slug: latest[0],
+    title: latest[1].title,
+    published: latest[1].published,
+    excerpt: latest[1].excerpt,
+    authors: latest[1].authors ? latest[1].authors : ['']
+  }
   return (
     <>
       <Container className="mt-9">
@@ -214,11 +231,12 @@ function RouteComponent() {
         </div>
       </Container>
       <Container className="mt-24 md:mt-28">
+        <h2 className="text-2xl font-semibold text-zinc-800 dark:text-zinc-100 mb-8">
+          Latest Blog Post
+        </h2>
         <div className="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
           <div className="flex flex-col gap-16">
-            {/*{articles.map((article) => (*/}
-            {/*  <Article key={article.slug} article={article} />*/}
-            {/*))}*/}
+            <Article key={article.slug} article={article} />
           </div>
           <div className="space-y-10 lg:pl-16 xl:pl-24">
             <Resume />
