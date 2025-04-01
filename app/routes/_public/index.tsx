@@ -42,12 +42,12 @@ function RouteComponent() {
         </p>
         <div className="mt-6 flex gap-6">
           <SocialLink
-            href="https://github.com/mauricioschneider/"
+            to="https://github.com/mauricioschneider/"
             aria-label="Follow on GitHub"
             icon={GitHubIcon}
           />
           <SocialLink
-            href="https://www.linkedin.com/in/mauriciorschneider/"
+            to="https://www.linkedin.com/in/mauriciorschneider/"
             aria-label="Follow on LinkedIn"
             icon={LinkedInIcon}
           />
