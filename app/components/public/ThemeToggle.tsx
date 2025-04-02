@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { create } from 'zustand'
 
 const themeModeSchema = z.enum(['light', 'dark', 'auto'])
-const prefersModeSchema = z.enum(['light', 'dark'])
+const prefersModeSchema = z.enum(['light', 'dark', 'auto'])
 
 type ThemeMode = z.infer<typeof themeModeSchema>
 type PrefersMode = z.infer<typeof prefersModeSchema>
@@ -13,7 +13,7 @@ type PrefersMode = z.infer<typeof prefersModeSchema>
 interface ThemeStore {
   mode: ThemeMode
   prefers: PrefersMode
-  toggleMode: () => void
+  toggleMode: (mode? : string) => void
   setPrefers: (prefers: PrefersMode) => void
 }
 
@@ -25,7 +25,7 @@ const updateThemeCookie = createServerFn({ method: 'POST' })
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
       path: '/',
-      maxAge: 60 * 60 * 24 * 365 * 10,
+      maxAge: 60 * 60 * 24 * 365 * 10
     })
   })
 
@@ -46,24 +46,25 @@ export const useThemeStore = create<ThemeStore>((set, get) => ({
 
     return 'light'
   })(),
-  toggleMode: () =>
+  toggleMode: (mode?: 'light' | 'dark' | 'auto') =>
     set((s) => {
-      const newMode =
+
+      const newMode = mode ? mode :
         s.mode === 'auto' ? 'light' : s.mode === 'light' ? 'dark' : 'auto'
 
       updateThemeClass(newMode, s.prefers)
       updateThemeCookie({
-        data: newMode,
+        data: newMode
       })
 
       return {
-        mode: newMode,
+        mode: newMode
       }
     }),
   setPrefers: (prefers) => {
     set({ prefers })
     updateThemeClass(get().mode, prefers)
-  },
+  }
 }))
 
 if (typeof document !== 'undefined') {
@@ -85,8 +86,13 @@ function updateThemeClass(mode: ThemeMode, prefers: PrefersMode) {
 }
 
 export function ThemeToggle() {
-  //const mode = useThemeStore((s) => s.mode)
+  // TODO: Fix theme flicker on load if cookie is different than default
+  const mode = useThemeStore((s) => s.mode)
   const toggleMode = useThemeStore((s) => s.toggleMode)
+
+  React.useLayoutEffect(() => {
+    getThemeCookie().then((storedMode) => toggleMode(storedMode))
+  }, [])
 
   const handleToggleMode = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -102,8 +108,18 @@ export function ThemeToggle() {
       className="group rounded-full bg-white/90 px-3 py-2 ring-1 shadow-lg shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20"
       onClick={handleToggleMode}
     >
-      <SunIcon className="h-6 w-6 fill-zinc-100 stroke-zinc-500 transition group-hover:fill-zinc-200 group-hover:stroke-zinc-700 dark:hidden [@media(prefers-color-scheme:dark)]:fill-teal-50 [@media(prefers-color-scheme:dark)]:stroke-teal-500 [@media(prefers-color-scheme:dark)]:group-hover:fill-teal-50 [@media(prefers-color-scheme:dark)]:group-hover:stroke-teal-600" />
-      <MoonIcon className="hidden h-6 w-6 fill-zinc-700 stroke-zinc-500 transition dark:block [@media_not_(prefers-color-scheme:dark)]:fill-teal-400/10 [@media_not_(prefers-color-scheme:dark)]:stroke-teal-500 [@media(prefers-color-scheme:dark)]:group-hover:stroke-zinc-400" />
+      <SunIcon
+        className={`${mode !== 'light' ? 'hidden' : ''} h-6 w-6 fill-zinc-100 stroke-zinc-500 transition group-hover:fill-zinc-200 group-hover:stroke-zinc-700 [@media(prefers-color-scheme:dark)]:fill-teal-50 [@media(prefers-color-scheme:dark)]:stroke-teal-500 [@media(prefers-color-scheme:dark)]:group-hover:fill-teal-50 [@media(prefers-color-scheme:dark)]:group-hover:stroke-teal-600`} />
+      <MoonIcon
+        className={`${mode !== 'dark' ? 'hidden' : ''} h-6 w-6 fill-zinc-700 stroke-zinc-500 transition [@media_not_(prefers-color-scheme:dark)]:fill-teal-400/10 [@media_not_(prefers-color-scheme:dark)]:stroke-teal-500 [@media(prefers-color-scheme:dark)]:group-hover:stroke-zinc-400`}/>
+      <span
+        className={
+          `uppercase select-none h-6 w-6 stroke-zinc-500 text-teal-50 text-[.6rem] transition-opacity
+          ${mode === 'auto' ? 'opacity-80 hover:opacity-100' : 'hidden'}`
+        }
+      >
+          Auto
+        </span>
     </button>
   )
 }
@@ -118,7 +134,8 @@ function SunIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
       aria-hidden="true"
       {...props}
     >
-      <path d="M8 12.25A4.25 4.25 0 0 1 12.25 8v0a4.25 4.25 0 0 1 4.25 4.25v0a4.25 4.25 0 0 1-4.25 4.25v0A4.25 4.25 0 0 1 8 12.25v0Z" />
+      <path
+        d="M8 12.25A4.25 4.25 0 0 1 12.25 8v0a4.25 4.25 0 0 1 4.25 4.25v0a4.25 4.25 0 0 1-4.25 4.25v0A4.25 4.25 0 0 1 8 12.25v0Z" />
       <path
         d="M12.25 3v1.5M21.5 12.25H20M18.791 18.791l-1.06-1.06M18.791 5.709l-1.06 1.06M12.25 20v1.5M4.5 12.25H3M6.77 6.77 5.709 5.709M6.77 17.73l-1.061 1.061"
         fill="none"

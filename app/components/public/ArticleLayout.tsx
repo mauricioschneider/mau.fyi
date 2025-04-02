@@ -86,7 +86,7 @@ export function ArticleLayout({ article }: { article: ArticleWithSlug }) {
             <div className="py-4 opacity-70">
               <a
                 href={`https://github.com/${repo}/tree/${branch}/${article.filePath}`}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 dark:text-teal-50"
               >
                 <FaEdit /> Edit on GitHub
               </a>
