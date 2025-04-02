@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_public')({
       ...seo({
         title: 'Mauricio Schneider | Jack of All Trades',
         description: `Personal website with cool stuff in it`,
-        //image: `https://tanstack.com${ogImage}`,
+        image: `https://mau.fyi/logo512.png`,
         keywords: 'mauricio schneider',
       }),
     ],
