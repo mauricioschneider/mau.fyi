@@ -14,6 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as HelpImport } from './routes/help'
 import { Route as PublicImport } from './routes/_public'
 import { Route as PublicIndexImport } from './routes/_public/index'
+import { Route as PublicUsesImport } from './routes/_public/uses'
+import { Route as PublicProjectsImport } from './routes/_public/projects'
 import { Route as PublicBlogImport } from './routes/_public/blog'
 import { Route as PublicAboutImport } from './routes/_public/about'
 import { Route as PublicBlogIndexImport } from './routes/_public/blog.index'
@@ -35,6 +37,18 @@ const PublicRoute = PublicImport.update({
 const PublicIndexRoute = PublicIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicUsesRoute = PublicUsesImport.update({
+  id: '/uses',
+  path: '/uses',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicProjectsRoute = PublicProjectsImport.update({
+  id: '/projects',
+  path: '/projects',
   getParentRoute: () => PublicRoute,
 } as any)
 
@@ -94,6 +108,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicBlogImport
       parentRoute: typeof PublicImport
     }
+    '/_public/projects': {
+      id: '/_public/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof PublicProjectsImport
+      parentRoute: typeof PublicImport
+    }
+    '/_public/uses': {
+      id: '/_public/uses'
+      path: '/uses'
+      fullPath: '/uses'
+      preLoaderRoute: typeof PublicUsesImport
+      parentRoute: typeof PublicImport
+    }
     '/_public/': {
       id: '/_public/'
       path: '/'
@@ -137,12 +165,16 @@ const PublicBlogRouteWithChildren = PublicBlogRoute._addFileChildren(
 interface PublicRouteChildren {
   PublicAboutRoute: typeof PublicAboutRoute
   PublicBlogRoute: typeof PublicBlogRouteWithChildren
+  PublicProjectsRoute: typeof PublicProjectsRoute
+  PublicUsesRoute: typeof PublicUsesRoute
   PublicIndexRoute: typeof PublicIndexRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicAboutRoute: PublicAboutRoute,
   PublicBlogRoute: PublicBlogRouteWithChildren,
+  PublicProjectsRoute: PublicProjectsRoute,
+  PublicUsesRoute: PublicUsesRoute,
   PublicIndexRoute: PublicIndexRoute,
 }
 
@@ -154,6 +186,8 @@ export interface FileRoutesByFullPath {
   '/help': typeof HelpRoute
   '/about': typeof PublicAboutRoute
   '/blog': typeof PublicBlogRouteWithChildren
+  '/projects': typeof PublicProjectsRoute
+  '/uses': typeof PublicUsesRoute
   '/': typeof PublicIndexRoute
   '/blog/$': typeof PublicBlogSplatRoute
   '/blog/': typeof PublicBlogIndexRoute
@@ -162,6 +196,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/help': typeof HelpRoute
   '/about': typeof PublicAboutRoute
+  '/projects': typeof PublicProjectsRoute
+  '/uses': typeof PublicUsesRoute
   '/': typeof PublicIndexRoute
   '/blog/$': typeof PublicBlogSplatRoute
   '/blog': typeof PublicBlogIndexRoute
@@ -173,6 +209,8 @@ export interface FileRoutesById {
   '/help': typeof HelpRoute
   '/_public/about': typeof PublicAboutRoute
   '/_public/blog': typeof PublicBlogRouteWithChildren
+  '/_public/projects': typeof PublicProjectsRoute
+  '/_public/uses': typeof PublicUsesRoute
   '/_public/': typeof PublicIndexRoute
   '/_public/blog/$': typeof PublicBlogSplatRoute
   '/_public/blog/': typeof PublicBlogIndexRoute
@@ -180,15 +218,26 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/help' | '/about' | '/blog' | '/' | '/blog/$' | '/blog/'
+  fullPaths:
+    | ''
+    | '/help'
+    | '/about'
+    | '/blog'
+    | '/projects'
+    | '/uses'
+    | '/'
+    | '/blog/$'
+    | '/blog/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/help' | '/about' | '/' | '/blog/$' | '/blog'
+  to: '/help' | '/about' | '/projects' | '/uses' | '/' | '/blog/$' | '/blog'
   id:
     | '__root__'
     | '/_public'
     | '/help'
     | '/_public/about'
     | '/_public/blog'
+    | '/_public/projects'
+    | '/_public/uses'
     | '/_public/'
     | '/_public/blog/$'
     | '/_public/blog/'
@@ -224,6 +273,8 @@ export const routeTree = rootRoute
       "children": [
         "/_public/about",
         "/_public/blog",
+        "/_public/projects",
+        "/_public/uses",
         "/_public/"
       ]
     },
@@ -241,6 +292,14 @@ export const routeTree = rootRoute
         "/_public/blog/$",
         "/_public/blog/"
       ]
+    },
+    "/_public/projects": {
+      "filePath": "_public/projects.tsx",
+      "parent": "/_public"
+    },
+    "/_public/uses": {
+      "filePath": "_public/uses.tsx",
+      "parent": "/_public"
     },
     "/_public/": {
       "filePath": "_public/index.tsx",

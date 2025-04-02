@@ -22,6 +22,12 @@ export const Route = createFileRoute('/_public')({
         sizes: '16x16',
       },
     ],
+    scripts: [
+      {
+        src: 'https://tinylytics.app/embed/UEjamr5CMzAxZExyvn7X.js',
+        defer: true
+      }
+    ],
   }),
   component: RouteComponent,
 })

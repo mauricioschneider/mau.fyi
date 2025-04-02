@@ -1,5 +1,5 @@
 ---
-title: "Understanding Pseudo-Random Numbers vs. Cryptographically Secure Pseudo-Random Numbers"
+title: "Using Proton Mail as Email Server in Bluesky PDS"
 published: 02/25/2024
 authors:
   - Mauricio Schneider
